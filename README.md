@@ -1,32 +1,82 @@
-# React + TypeScript + Vite
+# SplitTrip — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Web client for **SplitTrip**, an app to split shared expenses among friends and settle up with the fewest possible payments.
 
-Currently, two official plugins are available:
+## Collaborators
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Juan Esteban Rodriguez
 
-## React Compiler
+## Tech stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 · TypeScript · Vite
+- React Router
+- Plain CSS with design tokens (no UI framework)
+- Oxlint
 
-## Expanding the Oxlint configuration
+## Features
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- Sign up with a live password checklist, email verification, login with "remember me", and password reset
+- **My groups:** search, filter by category, and see your balance in each group
+- **Create group:** category and participants (you are included automatically)
+- **Group detail:** expenses, balances (paid vs. fair share) and a settlement plan
+- **Add expense:** who paid, who shares it, and a live per-person amount
+- Responsive layout for desktop and mobile
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## Getting started
+
+Requirements: Node.js 20.19+ (LTS recommended) and the [SplitTrip backend](https://github.com/JuanEstebanRodriguez2021/SplitTrip_Backend) running on port 7986.
+
+```bash
+npm install
+npm run dev       # http://localhost:5173
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### Environment
+
+The API URL is set in `.env`:
+
+```
+VITE_API_URL=http://localhost:7986/api
+```
+
+### Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the dev server |
+| `npm run build` | Type-check and build for production |
+| `npm run preview` | Preview the production build |
+| `npm run lint` | Run Oxlint |
+
+## Routes
+
+| Path | Page |
+|---|---|
+| `/login`, `/register` | Authentication |
+| `/verify-email?token=…` | Email verification (link from email) |
+| `/forgot-password`, `/reset-password?token=…` | Password reset |
+| `/` | My groups |
+| `/trips/new` | Create group |
+| `/trips/:tripId` | Group detail |
+| `/trips/:tripId/expenses/new` | Add expense |
+
+## Project structure
+
+```
+src/
+├── api/          HTTP client, endpoints, types and session storage
+├── auth/         Auth context and route guards
+├── components/   Shared UI (header, avatars, layouts)
+├── lib/          Formatting helpers, password rules, useApi hook
+├── pages/        One file per screen
+└── index.css     Styles and design tokens
+```
+
+## Notes
+
+- The session is kept in `localStorage` with "remember me", or in `sessionStorage` without it. An expired token sends you back to login.
+- Amounts are shown in Colombian pesos format (`$845.000`).
+
+## Related
+
+Backend: [SplitTrip_Backend](https://github.com/JuanEstebanRodriguez2021/SplitTrip_Backend)
